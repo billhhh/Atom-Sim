@@ -58,13 +58,14 @@ def main():
     trials = 10
 
     coords = generate_points(n=red_num+black_num, shape=(w, h), min_dist=diameter)
-    dye_red = np.random.randint(low=0, high=red_num+black_num, size=red_num)
-    colors = np.zeros(len(coords))
-    colors[dye_red] = 1  # reds are 1s; blacks are 0s
+    dye_reds = np.random.randint(low=0, high=red_num+black_num, size=red_num)
+    colors = ['b'] * len(coords)
+    for dye_red in dye_reds: colors[dye_red] = 'r'  # reds are 1s; blacks are 0s
 
     # plot
-    plt.figure(figsize=(5, 5))
-    plt.scatter(coords[:, 0], coords[:, 1], s=3)
+    fig_size = 5
+    plt.figure(figsize=(fig_size, fig_size))
+    plt.scatter(coords[:, 0], coords[:, 1], s=20, facecolors='none', edgecolors=colors)
     plt.show()
 
 
