@@ -34,19 +34,19 @@ def generate_points(n, shape, min_dist):
         while True:
             x = np.random.uniform(low=min_dist/2, high=shape[0]-min_dist/2)
             y = np.random.uniform(low=min_dist/2, high=shape[1]-min_dist/2)
-            cur_coord = [x, y]
+            cur_coord = np.array([x, y])
 
-            find_flag = False
+            reject = False
             for coord in coords:
-                dist = np.linalg.norm(np.array(coord) - np.array(cur_coord))
+                dist = np.linalg.norm(coord - cur_coord)
                 if dist < min_dist:
-                    find_flag = True
+                    reject = True
                     break
 
-            if not find_flag:
+            if not reject:
                 coords.append(cur_coord)
                 break
-    return coords
+    return np.array(coords)
 
 
 def main():
