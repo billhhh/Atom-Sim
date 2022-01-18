@@ -85,9 +85,9 @@ def main():
     distances = cal_distance(coords, colors)
 
     # plot hists, fixed bin size
-    bin_size = 5
+    bin_size = 1
     bins = np.arange(0, 1.415 * w, bin_size)  # fixed bin size
-    plt.xlim([min(distances) - 5, max(distances) + 5])
+    plt.xlim([min(distances) - bin_size, max(distances) + bin_size])
 
     plt.hist(distances, bins=bins, alpha=0.5)
     plt.title('Histogram of distance (fixed bin size)')
