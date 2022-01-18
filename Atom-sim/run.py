@@ -49,6 +49,20 @@ def generate_points(n, shape, min_dist):
     return np.array(coords)
 
 
+def cal_distance(coords, colors):
+    distances = []
+    red_pos = [i for i in range(len(colors)) if colors[i] == 'r']
+    black_pos = [i for i in range(len(colors)) if colors[i] == 'b']
+
+    # cal distances
+    for red_i in red_pos:
+        for black_i in black_pos:
+            dist = np.linalg.norm(coords[red_i] - coords[black_i])
+            distances.append(dist)
+
+    return distances
+
+
 def main():
     w = 100
     h = 100
@@ -60,12 +74,25 @@ def main():
     coords = generate_points(n=red_num+black_num, shape=(w, h), min_dist=diameter)
     dye_reds = np.random.randint(low=0, high=red_num+black_num, size=red_num)
     colors = ['b'] * len(coords)
-    for dye_red in dye_reds: colors[dye_red] = 'r'  # reds are 1s; blacks are 0s
+    for dye_red in dye_reds: colors[dye_red] = 'r'  # reds are 'r's; blacks are 'b's
 
-    # plot
+    # plot points
     fig_size = 5
     plt.figure(figsize=(fig_size, fig_size))
     plt.scatter(coords[:, 0], coords[:, 1], s=20, facecolors='none', edgecolors=colors)
+    plt.show()
+
+    distances = cal_distance(coords, colors)
+
+    # plot hists, fixed bin size
+    bins = np.arange(0, 1.415 * w, 5)  # fixed bin size
+    plt.xlim([min(distances) - 5, max(distances) + 5])
+
+    plt.hist(distances, bins=bins, alpha=0.5)
+    plt.title('Histogram of data (fixed bin size)')
+    plt.xlabel('variable X (bin size = 5)')
+    plt.ylabel('count')
+
     plt.show()
 
 
