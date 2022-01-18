@@ -72,7 +72,7 @@ def main():
     trials = 10
 
     coords = generate_points(n=red_num+black_num, shape=(w, h), min_dist=diameter)
-    dye_reds = np.random.randint(low=0, high=red_num+black_num, size=red_num)
+    dye_reds = np.random.choice(range(red_num+black_num), size=red_num, replace=False)
     colors = ['b'] * len(coords)
     for dye_red in dye_reds: colors[dye_red] = 'r'  # reds are 'r's; blacks are 'b's
 
@@ -85,12 +85,13 @@ def main():
     distances = cal_distance(coords, colors)
 
     # plot hists, fixed bin size
-    bins = np.arange(0, 1.415 * w, 5)  # fixed bin size
+    bin_size = 5
+    bins = np.arange(0, 1.415 * w, bin_size)  # fixed bin size
     plt.xlim([min(distances) - 5, max(distances) + 5])
 
     plt.hist(distances, bins=bins, alpha=0.5)
-    plt.title('Histogram of data (fixed bin size)')
-    plt.xlabel('variable X (bin size = 5)')
+    plt.title('Histogram of distance (fixed bin size)')
+    plt.xlabel('distance (bin size = ' + str(bin_size) + ')')
     plt.ylabel('count')
 
     plt.show()
