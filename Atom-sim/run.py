@@ -2,15 +2,18 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-def generate_points_with_min_distance(n, shape, min_dist):
+def generate_points(n, shape, min_dist):
     # compute grid shape based on number of points
-    width_ratio = shape[1] / shape[0]
-    num_y = np.int32(np.sqrt(n / width_ratio)) + 1
-    num_x = np.int32(n / num_y) + 1
+    # width_ratio = shape[1] / shape[0]
+    # num_y = np.int32(np.sqrt(n / width_ratio)) + 1
+    # num_x = np.int32(n / num_y) + 1
+
+    num_x = np.int32(np.sqrt(n))
+    num_y = np.int32(np.sqrt(n))
 
     # create regularly spaced neurons
-    x = np.linspace(0., shape[1]-1, num_x, dtype=np.float32)
-    y = np.linspace(0., shape[0]-1, num_y, dtype=np.float32)
+    x = np.linspace(0.+min_dist/2, shape[1]-min_dist/2, num_x, dtype=np.float32)
+    y = np.linspace(0.+min_dist/2, shape[0]-min_dist/2, num_y, dtype=np.float32)
     coords = np.stack(np.meshgrid(x, y), -1).reshape(-1,2)
 
     # compute spacing
@@ -19,10 +22,9 @@ def generate_points_with_min_distance(n, shape, min_dist):
     # perturb points
     max_movement = (init_dist - min_dist)/2
     noise = np.random.uniform(low=-max_movement,
-                                high=max_movement,
-                                size=(len(coords), 2))
+                              high=max_movement,
+                              size=(len(coords), 2))
     coords += noise
-
     return coords
 
 
@@ -34,10 +36,13 @@ def main():
     black_num = 50
     trials = 10
 
-    coords = generate_points_with_min_distance(n=red_num, shape=(w, h), min_dist=diameter)
+    coords = generate_points(n=red_num+black_num, shape=(w, h), min_dist=diameter)
+    dye_red = np.random.randint(low=0, high=red_num+black_num, size=red_num)
+    colors = np.zeros(len(coords))
+    colors[dye_red] = 1  # reds are 1s; blacks are 0s
 
     # plot
-    plt.figure(figsize=(10, 10))
+    plt.figure(figsize=(5, 5))
     plt.scatter(coords[:, 0], coords[:, 1], s=3)
     plt.show()
 
