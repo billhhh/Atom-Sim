@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-def generate_points(n, shape, min_dist):
+def generate_points_regular(n, shape, min_dist):
     # compute grid shape based on number of points
     # width_ratio = shape[1] / shape[0]
     # num_y = np.int32(np.sqrt(n / width_ratio)) + 1
@@ -25,6 +25,27 @@ def generate_points(n, shape, min_dist):
                               high=max_movement,
                               size=(len(coords), 2))
     coords += noise
+    return coords
+
+
+def generate_points(n, shape, min_dist):
+    coords = []
+    for i in range(n):
+        while True:
+            x = np.random.uniform(low=min_dist/2, high=shape[0]-min_dist/2)
+            y = np.random.uniform(low=min_dist/2, high=shape[1]-min_dist/2)
+            cur_coord = [x, y]
+
+            find_flag = False
+            for coord in coords:
+                dist = np.linalg.norm(np.array(coord) - np.array(cur_coord))
+                if dist < min_dist:
+                    find_flag = True
+                    break
+
+            if not find_flag:
+                coords.append(cur_coord)
+                break
     return coords
 
 
